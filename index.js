@@ -546,12 +546,12 @@ module.exports = class EmojiUtility extends Plugin {
      */
 
     const { AUTOCOMPLETE_OPTIONS: AutocompleteTypes } = await getModule([ 'AUTOCOMPLETE_OPTIONS' ]);
-    inject('pc-emojiUtility-hideEmojisComplete', AutocompleteTypes.EMOJIS_AND_STICKERS, 'queryResults', (args, res) => {
+    inject('emojiUtility-hideEmojisComplete', AutocompleteTypes.EMOJIS_AND_STICKERS, 'queryResults', (args, res) => {
       res.results.emojis = res.results.emojis.filter(emoji => !this.getHiddenGuilds().includes(emoji.guildId));
       return res;
     });
 
-    powercord.api.settings.registerSettings('pc-emojiUtility', {
+    powercord.api.settings.registerSettings('emojiUtility', {
       category: this.entityID,
       label: 'Emote Utility',
       render: Settings
@@ -779,23 +779,23 @@ module.exports = class EmojiUtility extends Plugin {
   }
 
   pluginWillUnload () {
-    powercord.api.settings.unregisterSettings('pc-emojiUtility');
+    powercord.api.settings.unregisterSettings('emojiUtility');
     powercord.api.commands.unregisterCommand('cloneemote');
     powercord.api.commands.unregisterCommand('findemote');
     powercord.api.commands.unregisterCommand('massemote');
     powercord.api.commands.unregisterCommand('saveemote');
-    uninject('pc-emojiUtility-emojiContext');
-    uninject('pc-emojiUtility-reactionContext');
-    uninject('pc-emojiUtility-hideEmojisPicker');
-    uninject('pc-emojiUtility-hideEmojisPickerRm');
-    uninject('pc-emojiUtility-hideEmojisPickerMount');
-    uninject('pc-emojiUtility-hideEmojisComplete');
+    uninject('emojiUtility-emojiContext');
+    uninject('emojiUtility-reactionContext');
+    uninject('emojiUtility-hideEmojisPicker');
+    uninject('emojiUtility-hideEmojisPickerRm');
+    uninject('emojiUtility-hideEmojisPickerMount');
+    uninject('emojiUtility-hideEmojisComplete');
   }
 
   async _injectContextMenu (cloneSubMenu, createSubMenu) {
     const { imageWrapper } = await getModule([ 'imageWrapper' ]);
     const { MenuSeparator } = await getModule([ 'MenuGroup' ]);
-    injectContextMenu('pc-emojiUtility-emojiContext', 'MessageContextMenu', ([ { target } ], res) => {
+    injectContextMenu('emojiUtility-emojiContext', 'MessageContextMenu', ([ { target } ], res) => {
       if (target.classList.contains('emoji')) {
         const matcher = target.src.match(this.getEmojiUrlRegex());
         if (matcher) {
